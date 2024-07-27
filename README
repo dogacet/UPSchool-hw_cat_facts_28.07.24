@@ -1,0 +1,196 @@
+# streamlit run app.py
+
+-----------------
+
+
+pip install requests sqlite3
+Elbette, aşağıda belirttiğiniz adımları takip ederek bir Python uygulaması geliştireceğiz. Bu uygulama, "https://cat-fact.herokuapp.com/facts" adresindeki API'ye GET isteği göndererek dönen JSON verisini alacak, bu veriyi bir SQLite veritabanına kaydedecek ve veritabanına kaydedilen veriyi terminalde görüntüleyecek.
+
+Öncelikle, gerekli kütüphaneleri kurmamız gerekiyor:
+
+bash
+Code kopieren
+pip install requests sqlite3
+Daha sonra, uygulamamızı aşağıdaki gibi geliştirebiliriz:
+
+1. Gerekli Kütüphaneleri İçeri Aktarma
+python
+Code kopieren
+import requests
+import sqlite3
+2. API İsteği Gönderme ve JSON Verisini Alma
+python
+Code kopieren
+url = "https://cat-fact.herokuapp.com/facts"
+response = requests.get(url)
+cat_facts = response.json()
+3. SQLite Veritabanı Oluşturma
+python
+Code kopieren
+conn = sqlite3.connect('cat_facts.db')
+c = conn.cursor()
+
+# Cat facts tablosunu oluşturma
+c.execute('''
+          CREATE TABLE IF NOT EXISTS cat_facts
+          (id INTEGER PRIMARY KEY AUTOINCREMENT,
+          text TEXT)
+          ''')
+
+conn.commit()
+4. API'den Alınan Veriyi SQLite Veritabanına Kaydetme
+python
+Code kopieren
+# Alınan veriyi veritabanına ekleme
+for fact in cat_facts['all']:
+    c.execute("INSERT INTO cat_facts (text) VALUES (?)", (fact['text'],))
+
+conn.commit()
+5. Veritabanına Kaydedilen Kedi Fact'lerini Görüntüleme
+python
+Code kopieren
+# Veritabanındaki tüm kedi fact'lerini görüntüleme
+c.execute("SELECT * FROM cat_facts")
+rows = c.fetchall()
+
+for row in rows:
+    print(row)
+
+conn.close()
+Tam Python Kodu
+Aşağıda, yukarıdaki tüm adımları birleştiren tam Python kodu bulunmaktadır:
+
+python
+Code kopieren
+import requests
+import sqlite3
+
+# 1. API İsteği Gönderme ve JSON Verisini Alma
+url = "https://cat-fact.herokuapp.com/facts"
+response = requests.get(url)
+cat_facts = response.json()
+
+# 2. SQLite Veritabanı Oluşturma
+conn = sqlite3.connect('cat_facts.db')
+c = conn.cursor()
+
+# Cat facts tablosunu oluşturma
+c.execute('''
+          CREATE TABLE IF NOT EXISTS cat_facts
+          (id INTEGER PRIMARY KEY AUTOINCREMENT,
+          text TEXT)
+          ''')
+
+conn.commit()
+
+# 3. API'den Alınan Veriyi SQLite Veritabanına Kaydetme
+# Alınan veriyi veritabanına ekleme
+for fact in cat_facts['all']:
+    c.execute("INSERT INTO cat_facts (text) VALUES (?)", (fact['text'],))
+
+conn.commit()
+
+# 4. Veritabanına Kaydedilen Kedi Fact'lerini Görüntüleme
+# Veritabanındaki tüm kedi fact'lerini görüntüleme
+c.execute("SELECT * FROM cat_facts")
+rows = c.fetchall()
+
+for row in rows:
+    print(row)
+
+conn.close()
+Bu kodu çalıştırdığınızda, API'den alınan kedi fact'leri SQLite veritabanına kaydedilecek ve ardından terminalde görüntülenecektir. GitHub Co-Pilot ve diğer araçlarla geliştirme sürecinde bu kodu özelleştirebilir ve daha da geliştirebilirsiniz.
+ERROR: Could not find a version that satisfies the requirement sqlite3 (from versions: none)
+ERROR: No matching distribution found for sqlite3
+
+ChatGPT
+Python'da sqlite3 modülü, standart kütüphane kapsamında yer alır ve ek bir yüklemeye gerek yoktur. Bu nedenle, pip install sqlite3 komutunu kullanmanıza gerek yoktur. Doğrudan Python kodunuzda import sqlite3 yapabilirsiniz.
+
+Aşağıdaki adımları ve kodu kullanarak uygulamayı tekrar deneyebilirsiniz:
+
+1. Gerekli Kütüphaneleri İçeri Aktarma
+python
+Code kopieren
+import requests
+import sqlite3
+2. API İsteği Gönderme ve JSON Verisini Alma
+python
+Code kopieren
+url = "https://cat-fact.herokuapp.com/facts"
+response = requests.get(url)
+cat_facts = response.json()
+3. SQLite Veritabanı Oluşturma
+python
+Code kopieren
+conn = sqlite3.connect('cat_facts.db')
+c = conn.cursor()
+
+# Cat facts tablosunu oluşturma
+c.execute('''
+          CREATE TABLE IF NOT EXISTS cat_facts
+          (id INTEGER PRIMARY KEY AUTOINCREMENT,
+          text TEXT)
+          ''')
+
+conn.commit()
+4. API'den Alınan Veriyi SQLite Veritabanına Kaydetme
+python
+Code kopieren
+# Alınan veriyi veritabanına ekleme
+for fact in cat_facts:
+    c.execute("INSERT INTO cat_facts (text) VALUES (?)", (fact['text'],))
+
+conn.commit()
+5. Veritabanına Kaydedilen Kedi Fact'lerini Görüntüleme
+python
+Code kopieren
+# Veritabanındaki tüm kedi fact'lerini görüntüleme
+c.execute("SELECT * FROM cat_facts")
+rows = c.fetchall()
+
+for row in rows:
+    print(row)
+
+conn.close()
+Tam Python Kodu
+Aşağıda, yukarıdaki tüm adımları birleştiren tam Python kodu bulunmaktadır:
+
+python
+Code kopieren
+import requests
+import sqlite3
+
+# 1. API İsteği Gönderme ve JSON Verisini Alma
+url = "https://cat-fact.herokuapp.com/facts"
+response = requests.get(url)
+cat_facts = response.json()
+
+# 2. SQLite Veritabanı Oluşturma
+conn = sqlite3.connect('cat_facts.db')
+c = conn.cursor()
+
+# Cat facts tablosunu oluşturma
+c.execute('''
+          CREATE TABLE IF NOT EXISTS cat_facts
+          (id INTEGER PRIMARY KEY AUTOINCREMENT,
+          text TEXT)
+          ''')
+
+conn.commit()
+
+# 3. API'den Alınan Veriyi SQLite Veritabanına Kaydetme
+# Alınan veriyi veritabanına ekleme
+for fact in cat_facts:
+    c.execute("INSERT INTO cat_facts (text) VALUES (?)", (fact['text'],))
+
+conn.commit()
+
+# 4. Veritabanına Kaydedilen Kedi Fact'lerini Görüntüleme
+# Veritabanındaki tüm kedi fact'lerini görüntüleme
+c.execute("SELECT * FROM cat_facts")
+rows = c.fetchall()
+
+for row in rows:
+    print(row)
+
+conn.close()
